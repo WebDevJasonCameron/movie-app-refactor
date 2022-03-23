@@ -26,46 +26,10 @@
                     </ul>
                 </div>
                 <div class="card-footer">
-                    <button class="edit-btn btn-warning w-100">Edit</button>
+                    <button id="mod-${movie.id}" class="edit-btn btn-warning w-100">Edit</button>
                     <button id="${movie.id}" value="${movie.id}" class="delete-btn btn-danger w-100 my-1">Delete</button>
                 </div>
             </div> 
-        `
-    }
-    function movieCardsScripts(){
-        return `
-            <script>
-                const innerURL ='https://spangled-checkered-opera.glitch.me/movies';
-                
-                // DELETE  
-                let deleteBtnList = document.getElementsByClassName('delete-btn');
-                
-                function deleteBtnDist(){
-                    for(let i = 0; i < deleteBtnList.length; i++) {
-                      deleteBtnList[i].addEventListener('click', deleteMovie(i))
-                    }
-                }
-                
-                function deleteMovie(num){
-                    fetch(innerURL+'/'+num, {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        }
-                    })
-                    .then((r)=> console.log('Success' + r))
-                    .catch((e)=> console.log('Error' + e));
-                }
-
-                
-                
-
-        
-        
-            </script>
-        
-        
-        
         `
     }
     function movieCards(movieList){
@@ -73,7 +37,6 @@
         for (let i = 0; i < movieList.length; i++) {
             output += movieCard(movieList[i]);
         }
-        output += movieCardsScripts();
         return output;
     }
 
@@ -89,10 +52,15 @@
             actors: $('#actors-input').val(),
             plot: $('#plot-input').val(),
             rating: $('#rating-input').val(),
-            poster: ''
+            poster: $('#poster-input').val()
         }
     }
-
+    // function loader(){
+    //     setTimeout(() => {
+    //         return `
+    //         `
+    //     }, 3000);
+    // }
 
     /**
      * FETCH ACTIONS
@@ -115,21 +83,6 @@
             })
 
     }
-    // DEL
-    function delAction(num){
-        const delOption = {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        };
-        fetch(`${url}/${num}`, delOption)
-            .then(() =>console.log('Success in Deletion'))
-            .catch((error) => console.log('Failed to Delete', error))
-            .then(function (){
-                getAction();
-            })
-    }
     // MOD
     function modAction(movie){
         const modOption = {
@@ -148,22 +101,38 @@
         let output = '';
         fetch(url)
             .then((response) => response.json())
-            .then((movieList) => {
+            .then((movieList) => {                                      //  SETS CARDS
                 output += movieCards(movieList);
                 $('#movie-container').html(output);
             })
             .then((e) => {
-                let delOptions = {
+                let delOptions = {                                      //  DELETE
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 }
-                $('.delete-btn').click((e) =>{
+                $('.delete-btn').click((e) => {                         //   DEL BTN
                     e.preventDefault();
                     const tarID = e.target.id;
-
-                    fetch(`${url}/${tarID}`, delOptions)
+                    console.log(e)
+                    // fetch(`${url}/${tarID}`, delOptions)          //   DEL FETCH
+                    //     .then(getAction)
+                })
+            })
+            .then((e) => {                                              //   MOD
+                let selectedMovie
+                let modOptions = {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(selectedMovie),
+                };
+                $('.mod-btn').click((e) => {                            //   MOD BTN
+                    e.preventDefault();
+                    const tarID = e.target.id;                          //   Var gets the targeted delete btn id
+                    fetch(`${url}/${tarID}`, modOptions)          //   MOD FETCH-
                         .then(getAction)
                 })
             })

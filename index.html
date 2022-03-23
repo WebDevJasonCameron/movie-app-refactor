@@ -14,38 +14,51 @@
 </head>
 
 <body>
-	<h1>Movies, take three</h1>
-
-	<!--TEST-->
-<!--	<button id="del-btn"  class="btn btn-primary mx-3 my-3">DEL</button>-->
+	<h1 class="text-center my-5">Movies, take three</h1>
 
 
 	<!--MOVIES-->
-	<section id="movie-container" class="container d-flex flex-wrap mt-5">
+	<section id="movie-container" class="">
+		<div id="loader">
+			<img src="img/movie-loading.gif" alt="loading movies" width="1000px">
+		</div>
 	</section>
 
 
 	<!--MENU-->
-	<section id="menu-container">
-		<input id="title-input" type="text" class="form-input mx-3 my-3" placeholder="Title">
-		<input id="year-input" type="text" class="form-input mx-3 my-3" placeholder="Year">
-		<input id="genre-input" type="text" class="form-input mx-3 my-3" placeholder="Genre">
-		<input id="actors-input" type="text" class="form-input mx-3 my-3" placeholder="Actors">
-		<input id="director-input" type="text" class="form-input mx-3 my-3" placeholder="Director">
-		<input id="plot-input" type="text" class="form-input mx-3 my-3" placeholder="Description">
-		<input id="rating-input" type="text" class="form-input mx-3 my-3" placeholder="Rating">
-		<button id="add-btn" class="btn btn-primary mx-3 my-3">ADD</button>
-	</section>
-
+	<div class="container">
+		<h3 class="text-center h3 mt-4">ADD MOVIE</h3>
+		<section id="menu-container">
+			<input id="title-input" type="text" class="form-input mx-3 my-3" placeholder="Title">
+			<input id="year-input" type="text" class="form-input mx-3 my-3" placeholder="Year">
+			<input id="genre-input" type="text" class="form-input mx-3 my-3" placeholder="Genre">
+			<input id="actors-input" type="text" class="form-input mx-3 my-3" placeholder="Actors">
+			<input id="director-input" type="text" class="form-input mx-3 my-3" placeholder="Director">
+			<input id="plot-input" type="text" class="form-input mx-3 my-3" placeholder="Description">
+			<input id="rating-input" type="text" class="form-input mx-3 my-3" placeholder="Rating">
+			<input id="poster-input" type="text" class="form-input mx-3 my-3" placeholder="Past URL for poster">
+			<button id="add-btn" class="btn btn-primary mx-3 my-3">ADD</button>
+		</section>
+	</div>
 
 
 	<!--MODAL-->
-	<modal id="edit-form">
-
-
-
-
-	</modal>
+	<section id="edit-modal">
+		<div class="modal-content">
+			<h3 class="text-center h3 mt-4">EDIT MOVIE</h3>
+			<div id="mod-menu-container">
+				<input id="mod-title-input" type="text" class="form-input mx-3 my-3" placeholder="Title">
+				<input id="mod-year-input" type="text" class="form-input mx-3 my-3" placeholder="Year">
+				<input id="mod-genre-input" type="text" class="form-input mx-3 my-3" placeholder="Genre">
+				<input id="mod-actors-input" type="text" class="form-input mx-3 my-3" placeholder="Actors">
+				<input id="mod-director-input" type="text" class="form-input mx-3 my-3" placeholder="Director">
+				<input id="mod-plot-input" type="text" class="form-input mx-3 my-3" placeholder="Description">
+				<input id="mod-rating-input" type="text" class="form-input mx-3 my-3" placeholder="Rating">
+				<input id="mod-poster-input" type="text" class="form-input mx-3 my-3" placeholder="Past URL for poster">
+				<button id="mod-btn" class="btn btn-primary mx-3 my-3">MODIFY</button>
+			</div>
+		</div>
+	</section>
 
 
 	<!--SCRIPT-->
