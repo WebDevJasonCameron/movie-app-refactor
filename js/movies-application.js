@@ -1,77 +1,101 @@
+(function() {
 "use strict";
 
-// VARS, ARRAY, AND OBJ
-const glitchMovies = 'https://future-cloudy-parsnip.glitch.me/movies';
-const myMovieAPI = 'https://spangled-checkered-opera.glitch.me';
+    // VARS, ARRAY, AND OBJ
+    const url = 'https://spangled-checkered-opera.glitch.me/movies';
+    let idNum = ''
 
-
-/**
- * FUNCTIONS
- */
-// MOVIE
-function getMovies() {
-    return fetch(myMovieAPI).then((response) => response.json())
-}
-function simpleCard(movie){
-    let output = `
-            <div class="movie-card card">
-                <div class="card-body m-3">
-                    <div class="card-img-top">
-                        <img src="${movie.poster}" alt="Movie Poster">
-                    </div>
-                    Title: ${movie.title} <br>
-                    Rating: ${movie.rating} <br>
-                    Description: ${movie.plot} <br>
-                    Genre: ${movie.genre}<br>
-                    Year: ${movie.year}<br>
-                    Director: ${movie.director}<br>
-                    Actors/Actresses: ${movie.actors}<br>
-                    ID: ${movie.id}<br>
-                </div>
-                <div class="card-footer">
-                    <button>Delete</button>
-                    <button class="edit-btn">Edit</button>
-                </div>
-            </div>
-            
-            ${addJSButtons()}
-    `
-    // console.log(output);
-    return output;
-}
-
-// MODAL
-function addJSButtons(){
-        return `
-        <script>
-            $('.edit-btn').click( () => {
-                $('#edit-modal').css('display', 'block');
-            })
-            
-            $('.close-btn').click( () => {
-                $('#edit-modal').css('display', 'none');
-                console.log('click')
-            }) 
-            
-        </script>
-    `
-}
-
-
-
-// FORM
-
-
-
-/**
- * ACTIVATE
- */
-getMovies().then( (movieList) => {
-    let output = ''
-    for (let i = 0; i < movieList.length; i++) {
-        output += simpleCard(movieList[i]);
+    function buildMovie () {
+        return {
+            title: $('#title-input').val(),
+            director: $('#director-input').val(),
+            year: $('#year-input').val(),
+            genre: $('#genre-input').val(),
+            actors: $('#actors-input').val(),
+            plot: $('#plot-input').val(),
+            rating: $('#rating-input').val(),
+            poster: ''
+        }
     }
-    $('#movie-container').html(output);
-})
+
+
+    /**
+     * FETCH ACTIONS
+     */
+    // ADD
+    function addAction(m){
+        const addOption = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(m),
+        };
+        fetch(url, addOption)
+            .then(() =>console.log('Added Movie'))
+            .catch((error) => console.log('Failed to Add Movie: ', error))
+            .then(function(){
+                getAction()
+                console.log(m);
+            })
+
+    }
+    // DEL
+    function delAction(num){
+        const delOption = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+        fetch(`${url}/${num}`, delOption)
+            .then(() =>console.log('Success in Deletion'))
+            .catch((error) => console.log('Failed to Delete', error))
+            .then(function (){
+                getAction();
+            })
+
+    }
+    // MOD
+    function modAction(movie){
+        const modOption = {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(movie),
+        };
+        fetch(url, modOption)
+            .then(() =>console.log('Success in Modifying Movie'))
+            .catch((error) => console.log('Failed to Modify Movie', error))
+    }
+    // GET
+    function getAction() {
+        fetch(url).then((response) => response.json())
+            .then((r) => console.log(r))
+            .catch((e) => console.log(e))
+    }
+
+
+    /**
+     * EVENT LISTENERS
+     */
+    $('#add-btn').on('click', function (){
+        const movie = buildMovie();
+        addAction(movie)
+    })
+    $('#del-btn').on('click', function (){
+        let num = 7;
+        delAction(num)
+    })
+
+
+    /**
+     * INITIALIZE
+     */
+    getAction();
+
+
+})();
 
 
