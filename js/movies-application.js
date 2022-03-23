@@ -3,8 +3,48 @@
 
     // VARS, ARRAY, AND OBJ
     const url = 'https://spangled-checkered-opera.glitch.me/movies';
-    let idNum = ''
 
+    /**
+     * MOVIE CARD CONTAINER
+     */
+    function movieCard (movie){
+        return `
+             <div class="movie-card card">
+                <div class="card-body m-3">
+                    <div class="card-img-top">
+                        <img src="${movie.poster}" alt="Movie Poster" class="img-thumbnail">
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item">Title: ${movie.title}</li> 
+                        <li class="list-group-item">Rating: ${movie.rating}</li> 
+                        <li class="list-group-item">Description: ${movie.plot}</li> 
+                        <li class="list-group-item">Genre: ${movie.genre}</li>
+                        <li class="list-group-item">Year: ${movie.year}</li>
+                        <li class="list-group-item">Director: ${movie.director}</li>
+                        <li class="list-group-item">Actors/Actresses: ${movie.actors}</li>
+                        <li class="list-group-item">ID: ${movie.id}</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <button>Delete</button>
+                    <button class="edit-btn">Edit</button>
+                </div>
+            </div>
+ 
+        `
+    }
+    function movieCards(movieList){
+        let output = '';
+        for (let i = 0; i < movieList.length; i++) {
+            output += movieCard(movieList[i]);
+        }
+        return output;
+    }
+
+
+    /**
+     *  HELPER FUNCTIONS
+     */
     function buildMovie () {
         return {
             title: $('#title-input').val(),
@@ -71,9 +111,14 @@
     }
     // GET
     function getAction() {
+        let output = '';
         fetch(url).then((response) => response.json())
-            .then((r) => console.log(r))
+            .then((movieList) => {
+                output += movieCards(movieList);
+                $('#movie-container').html(output);
+            })
             .catch((e) => console.log(e))
+
     }
 
 

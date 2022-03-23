@@ -1,4 +1,28 @@
+/* MOVIE CARDS*/
+.movie-card {
+    width: 350px;
+    margin: 10px;
+}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* MODAL */
 #edit-modal {
     display: none;
     position: fixed;
@@ -21,12 +45,6 @@
     animation-name: modal-open;
     animation-duration: 1s;
 }
-
-/*.close-btn {*/
-/*    color: #ccc;*/
-/*    float: right;*/
-/*    font-size: 30px;*/
-/*}*/
 
 .close-btn:hover, .close-btn:focus {
     color: #000;
