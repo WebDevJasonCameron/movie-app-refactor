@@ -33,11 +33,11 @@
         `
     }
     function movieCards(movieList){
-        let output = '';
+        let output = '<div class="container d-flex justify-content-center flex-wrap">';
         for (let i = 0; i < movieList.length; i++) {
             output += movieCard(movieList[i]);
         }
-        return output;
+        return output + '</div>';
     }
 
     /**
@@ -55,12 +55,7 @@
             poster: $('#poster-input').val()
         }
     }
-    // function loader(){
-    //     setTimeout(() => {
-    //         return `
-    //         `
-    //     }, 3000);
-    // }
+
 
     /**
      * FETCH ACTIONS
@@ -103,9 +98,9 @@
             .then((response) => response.json())
             .then((movieList) => {                                      //  SETS CARDS
                 output += movieCards(movieList);
-                $('#movie-container').html(output);
+                $('#movie-container').html(output)
             })
-            .then((e) => {
+            .then(() => {
                 let delOptions = {                                      //  DELETE
                     method: 'DELETE',
                     headers: {
@@ -115,9 +110,8 @@
                 $('.delete-btn').click((e) => {                         //   DEL BTN
                     e.preventDefault();
                     const tarID = e.target.id;
-                    console.log(e)
-                    // fetch(`${url}/${tarID}`, delOptions)          //   DEL FETCH
-                    //     .then(getAction)
+                    fetch(`${url}/${tarID}`, delOptions)          //   DEL FETCH
+                        .then(getAction)
                 })
             })
             .then((e) => {                                              //   MOD
@@ -140,27 +134,6 @@
 
     }
 
-
-    /**
-     * TESTING PREACTION
-     */
-    // let mList = [];
-    // function preAction() {
-    //     let output = '';
-    //     fetch(url).then((response) => response.json())
-    //         .then((movieList) => {
-    //             mList = movieList;
-    //         })
-    //         .catch((e) => console.log(e))
-    // }
-    // setTimeout(() => {
-    //     let output = '';
-    //     output += movieCards(mList);
-    //     $('#movie-container').html(output);
-    // }, 500);
-    // preAction();
-
-
     /**
      * EVENT LISTENERS
      */
@@ -168,11 +141,7 @@
         const movie = buildMovie();
         addAction(movie)
     })
-    // $('.delete-btn').on('click', function (){
-    //     let num = 7;
-    //     console.log('click')
-    //     delAction(num)
-    // })
+
 
 
     /**
