@@ -34,6 +34,8 @@
 
     animation-name: modal-open;
     animation-duration: 1s;
+    z-index: 2;
+
 }
 
 .close-btn:hover, .close-btn:focus {
@@ -46,6 +48,4 @@
     from{ opacity: 0}
     to { opacity: 1}
 }
-
-
 

@@ -3,11 +3,12 @@
 
     // VARS, ARRAY, AND OBJ
     const url = 'https://spangled-checkered-opera.glitch.me/movies';
+    let movieLib = [];
 
     /**
      * MOVIE CARD CONTAINER
      */
-    function movieCard (movie){
+    function movieCard(movie){
         return `
              <div class="movie-card card border-0 bg-light shadow">
                 <div class="card-body m-3">
@@ -39,6 +40,62 @@
         }
         return output + '</div>';
     }
+
+    /**
+     * MODAL
+     */
+    function movieModal(movie){
+        return `
+            <div class="modal-content">
+                    <h3 class="text-center h3 mt-4">EDIT MOVIE</h3>
+                <div id="mod-menu-container">
+                    <input 
+                        id="mod-title-input" 
+                        type="text" 
+                        class="form-input mx-3 my-3" 
+                        placeholder="${movie.title}">
+                    <input 
+                        id="mod-year-input" 
+                        type="text" 
+                        class="form-input mx-3 my-3" 
+                        placeholder="${movie.year}">
+                    <input 
+                        id="mod-genre-input" 
+                        type="text" 
+                        class="form-input mx-3 my-3" 
+                        placeholder="${movie.genre}">
+                    <input 
+                        id="mod-actors-input" 
+                        type="text" 
+                        class="form-input mx-3 my-3" 
+                        placeholder="${movie.actors}">
+                    <input 
+                        id="mod-director-input" 
+                        type="text" 
+                        class="form-input mx-3 my-3" 
+                        placeholder="${movie.director}">
+                    <input 
+                        id="mod-plot-input" 
+                        type="text" 
+                        class="form-input mx-3 my-3" 
+                        placeholder="${movie.plot}">
+                    <input 
+                        id="mod-rating-input" 
+                        type="text" 
+                        class="form-input mx-3 my-3" 
+                        placeholder="${movie.rating}">
+                    <input 
+                        id="mod-poster-input" 
+                        type="text" 
+                        class="form-input mx-3 my-3" 
+                        placeholder="Different Poster URL">
+                    <button id="edit-btn" class="btn btn-primary mx-3 my-3">MODIFY</button>
+                    <button id="close-btn" class="btn btn-danger mx-3 my-3">CLOSE</button>
+                </div>
+            </div>
+        `
+    }
+
 
     /**
      *  HELPER FUNCTIONS
@@ -79,18 +136,18 @@
 
     }
     // MOD
-    function modAction(movie){
-        const modOption = {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(movie),
-        };
-        fetch(url, modOption)
-            .then(() =>console.log('Success in Modifying Movie'))
-            .catch((error) => console.log('Failed to Modify Movie', error))
-    }
+    // function modAction(movie){
+    //     const modOption = {
+    //         method: 'PATCH',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify(movie),
+    //     };
+    //     fetch(url, modOption)
+    //         .then(() =>console.log('Success in Modifying Movie'))
+    //         .catch((error) => console.log('Failed to Modify Movie', error))
+    // }
     // GET
     function getAction() {
         let output = '';
@@ -98,7 +155,17 @@
             .then((response) => response.json())
             .then((movieList) => {                                      //  SETS CARDS
                 output += movieCards(movieList);
-                $('#movie-container').html(output)
+                $('#movie-container').html(output)                      //   Add cards to the page
+                $('.edit-btn').click((e)=>{                             //   Edit btn Listener Events
+                    movieLib = movieList;                               //   Loads movie list for use later
+                    let selectMovieToMod = e.target.id;
+                    selectMovieToMod = selectMovieToMod.replace('mod-', '');
+                    $('#edit-modal').css('display', 'block')
+                        .html(movieModal(`${movieLib}[${selectMovieToMod}]`));
+
+                    console.log(selectMovieToMod)
+
+                })
             })
             .then(() => {
                 let delOptions = {                                      //  DELETE
@@ -111,22 +178,6 @@
                     e.preventDefault();
                     const tarID = e.target.id;
                     fetch(`${url}/${tarID}`, delOptions)          //   DEL FETCH
-                        .then(getAction)
-                })
-            })
-            .then((e) => {                                              //   MOD
-                let selectedMovie
-                let modOptions = {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(selectedMovie),
-                };
-                $('.mod-btn').click((e) => {                            //   MOD BTN
-                    e.preventDefault();
-                    const tarID = e.target.id;                          //   Var gets the targeted delete btn id
-                    fetch(`${url}/${tarID}`, modOptions)          //   MOD FETCH-
                         .then(getAction)
                 })
             })
@@ -143,7 +194,6 @@
     })
 
 
-
     /**
      * INITIALIZE
      */
@@ -153,3 +203,4 @@
 })();
 
 
+// ASYNC AWAIT
