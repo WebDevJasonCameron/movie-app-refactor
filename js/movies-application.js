@@ -180,7 +180,7 @@
                     let selectMovieToMod = e.target.id;
                     selectMovieToMod = selectMovieToMod.replace('mod-', '');
                     $('#edit-modal').css('display', 'block')
-                        .html(movieModal(`${movieLib}[${selectMovieToMod}]`));
+                        .html(movieModal(movieList[0]));
                     console.log(`${movieLib}`)
                     return movieLib;
                 });
@@ -225,7 +225,6 @@
      */
     getAction();
 
-console.log(movieLib);
 })();
 
 
