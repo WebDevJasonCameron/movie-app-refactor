@@ -40,6 +40,15 @@
         }
         return output + '</div>';
     }
+    function loader(){
+        return `
+            <div id="loader" class="container d-flex justify-content-center ">
+                <img src="../img/movie-loading.gif" alt="loading movies" width="900px">
+            </div>
+
+        
+        `
+    }
 
     /**
      * MODAL
@@ -93,6 +102,12 @@
                     <button id="close-btn" class="btn btn-danger mx-3 my-3">CLOSE</button>
                 </div>
             </div>
+            
+            <script>
+                $('#close-btn').click(()=> {
+                    $('#edit-modal').css('display', 'none')
+                })
+            </script>   
         `
     }
 
@@ -117,7 +132,7 @@
     /**
      * FETCH ACTIONS
      */
-    // ADD
+    // CREATE MOVIE ACTION
     function addAction(m){
         const addOption = {
             method: 'POST',
@@ -129,13 +144,17 @@
         fetch(url, addOption)
             .then(() =>console.log('Added Movie'))
             .catch((error) => console.log('Failed to Add Movie: ', error))
-            .then(function(){
-                getAction()
+            .then(() =>{
+                $('#movie-container').html(loader());
+                setTimeout(() => {
+                   getAction()
+                }, 3000);
+
                 console.log(m);
             })
 
     }
-    // MOD
+    // MODIFY MOVIE ACTION                      <-- prob delete this after it's placed in the RUD ACTION
     // function modAction(movie){
     //     const modOption = {
     //         method: 'PATCH',
@@ -146,9 +165,9 @@
     //     };
     //     fetch(url, modOption)
     //         .then(() =>console.log('Success in Modifying Movie'))
-    //         .catch((error) => console.log('Failed to Modify Movie', error))
-    // }
-    // GET
+    //         .catch((error) => console.log('Failed to Modify Movie',
+
+    // READ, update, DELETE ACTION
     function getAction() {
         let output = '';
         fetch(url)
@@ -162,10 +181,12 @@
                     selectMovieToMod = selectMovieToMod.replace('mod-', '');
                     $('#edit-modal').css('display', 'block')
                         .html(movieModal(`${movieLib}[${selectMovieToMod}]`));
-
-                    console.log(selectMovieToMod)
-
-                })
+                    console.log(`${movieLib}`)
+                    return movieLib;
+                });
+            })
+            .then((x)=>{
+                console.log(x)
             })
             .then(() => {
                 let delOptions = {                                      //  DELETE
@@ -178,7 +199,12 @@
                     e.preventDefault();
                     const tarID = e.target.id;
                     fetch(`${url}/${tarID}`, delOptions)          //   DEL FETCH
-                        .then(getAction)
+                        .then(()=>{
+                            $('#movie-container').html(loader());
+                            setTimeout(() => {
+                                getAction()
+                            }, 2000);
+                        })
                 })
             })
             .catch((e) => console.log(e));
@@ -199,7 +225,7 @@
      */
     getAction();
 
-
+console.log(movieLib);
 })();
 
 
