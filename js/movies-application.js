@@ -45,8 +45,6 @@
             <div id="loader" class="container d-flex justify-content-center ">
                 <img src="../img/movie-loading.gif" alt="loading movies" width="900px">
             </div>
-
-        
         `
     }
 
@@ -107,6 +105,7 @@
                 $('#close-btn').click(()=> {
                     $('#edit-modal').css('display', 'none')
                 })
+                console.log(${movie.id})
             </script>   
         `
     }
@@ -180,10 +179,9 @@
                     let selectMovieToMod = e.target.id;
                     selectMovieToMod = selectMovieToMod.replace('mod-', '');
                     $('#edit-modal').css('display', 'block')
-                        .html(movieModal(movieList[0]));
-                    console.log(`${movieLib}`)
-                    return movieLib;
-                });
+                        .html(movieModal(movieLib[selectMovieToMod]));
+                    // console.log(`${selectMovieToMod}`);
+                    // console.log(movieLib[selectMovieToMod])});
             })
             .then((x)=>{
                 console.log(x)
@@ -207,7 +205,10 @@
                         })
                 })
             })
-            .catch((e) => console.log(e));
+            .catch((e) => {
+                console.log(e)
+            })
+            });
 
     }
 
