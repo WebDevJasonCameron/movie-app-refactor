@@ -7,7 +7,7 @@ let movieList = []
  */
 function movieCard(movie) {
     return `
-         <div class="movie-card card border-0 bg-light shadow">
+        <div class="movie-card card border-0 bg-light shadow">
             <div class="card-body m-3">
                 <div class="card-img-top">
                     <img src="${movie.poster}" alt="Movie Poster" class="img-thumbnail">
@@ -27,14 +27,16 @@ function movieCard(movie) {
                 <button 
                     id="mod-btn-${movie.id}" 
                     class="edit-btn btn-warning w-100" 
-                    onclick="getModal(${movie.id})">                           <!--Function HERE-->
-                        Edit
+                    aria-label="Button to edit movie"
+                    onclick="getModal(${movie.id})"> 
+                        Edit                         
                 </button>
                 <button 
                     type="button" 
                     id="del-btn-${movie.id}" 
                     class="delete-btn btn-danger w-100 my-1"
-                    onclick="deleteAction(${movie.id})">                           <!--Function HERE-->
+                    aria-label="Button to delete movie"
+                    onclick="deleteAction(${movie.id})">                           
                         Delete
                 </button>
             </div>
@@ -44,7 +46,7 @@ function movieCard(movie) {
 function movieCards(mList){
     return  '<div class="container d-flex justify-content-center flex-wrap">' +
                 mList.map(movieCard) +
-                '</div>'
+            '</div>'
 
 }
 
@@ -106,7 +108,7 @@ function movieModal(movie){
                 <button 
                     id="close-modal-btn" 
                     class="btn btn-danger mx-3 my-3"
-                    onclick="closeModal()">                                 <!--Function HERE-->
+                    onclick="closeModal()">                              
                         CLOSE
                     </button>
             </div>
@@ -114,12 +116,8 @@ function movieModal(movie){
     `
 }
 function getModal(mID){
-    let targetMovie = $( this )
     $('#edit-modal').css('display', 'block')
         .html(movieModal(movieList[mID]))
-    console.log(mID);
-    console.log(movieList);
-
 }
 function closeModal(){
     $('#edit-modal').css('display', 'none')
@@ -145,12 +143,12 @@ function buildMovie () {
 function buildModMovie (movie) {
     return {
         title: checkModN($('#mod-title-input').val(), movie.title),
-        director: checkModN($('#mod-director-input').val(),movie.director),
+        director: checkModN($('#mod-director-input').val(), movie.director),
         year: checkModN($('#mod-year-input').val(), movie.year),
         genre: checkModN($('#mod-genre-input').val(), movie.genre),
         actors: checkModN($('#mod-actors-input').val(), movie.actors),
         plot: checkModN($('#mod-plot-input').val(), movie.plot),
-        rating: checkModN($('#mod-rating-input').val(),movie.rating),
+        rating: checkModN($('#mod-rating-input').val(), movie.rating),
         poster: checkModN($('#mod-poster-input').val(), movie.poster)
     }
 }
@@ -267,3 +265,6 @@ $('#add-movie-btn').on('click', function (){
  */
 readAction();
 
+
+
+// test:   ,  '
