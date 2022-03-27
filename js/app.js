@@ -100,7 +100,7 @@ function movieModal(movie){
                 <button 
                     id="edit-btn" 
                     class="btn btn-primary mx-3 my-3"
-                    onclick="updateAction([${movieList.id}])">            <!--Function HERE-->
+                    onclick="updateAction(${movie.id})">                 <!--Function HERE-->
                         MODIFY
                     </button>
                 <button 
@@ -142,16 +142,16 @@ function buildMovie () {
         poster: checkURLInput($('#poster-input').val())
     }
 }
-function buildModMovie (m) {
+function buildModMovie (movie) {
     return {
-        title: checkModN($('#mod-title-input').val(), m.title),
-        director: checkModN($('#mod-director-input').val(), m.director),
-        year: checkModN($('#mod-year-input').val(), m.year),
-        genre: checkModN($('#mod-genre-input').val(), m.genre),
-        actors: checkModN($('#mod-actors-input').val(), m.actors),
-        plot: checkModN($('#mod-plot-input').val(), m.plot),
-        rating: checkModN($('#mod-rating-input').val(), m.rating),
-        poster: checkModN($('#mod-poster-input').val(), m.poster)
+        title: checkModN($('#mod-title-input').val(), movie.title),
+        director: checkModN($('#mod-director-input').val(),movie.director),
+        year: checkModN($('#mod-year-input').val(), movie.year),
+        genre: checkModN($('#mod-genre-input').val(), movie.genre),
+        actors: checkModN($('#mod-actors-input').val(), movie.actors),
+        plot: checkModN($('#mod-plot-input').val(), movie.plot),
+        rating: checkModN($('#mod-rating-input').val(),movie.rating),
+        poster: checkModN($('#mod-poster-input').val(), movie.poster)
     }
 }
 
@@ -223,23 +223,22 @@ function readAction(){
         })
 }
 // UPDATE
-function updateAction(m){
-    const modMovie = buildModMovie(m);
-    console.log("m is: " + m)
-    console.log("modMovie is: " + modMovie);
-    // const modOptions = {
-    //     method: 'PUT',
-    //     headers: {
-    //         'Content-Type' : 'application/json'
-    //     },
-    //     body: JSON.stringify(modMovie)
-    // };
-    // fetch(`${url}/${m.id}`, modOptions)
-    //     .then(() => {
-    //         movieList = [];
-    //         $('#movie-container').html(loader());
-    //         readAction();
-    //     });
+function updateAction(mID){
+    const modMovie = buildModMovie(movieList[mID]);
+    console.log(modMovie);
+    const modOptions = {
+        method: 'PUT',
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify(modMovie)
+    };
+    fetch(url + '/' + mID, modOptions)
+        .then(() => {
+            movieList = [];
+            $('#movie-container').html(loader());
+            readAction();
+        });
     closeModal();
 }
 // DELETE
