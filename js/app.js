@@ -1,9 +1,8 @@
 (function() {
-"use strict";
+    "use strict";
 
     // VARS, ARRAY, AND OBJ
     const url = 'https://spangled-checkered-opera.glitch.me/movies';
-    let movieLib = [];
 
     /**
      * MOVIE CARD CONTAINER
@@ -27,26 +26,29 @@
                     </ul>
                 </div>
                 <div class="card-footer">
-                    <button id="mod-${movie.id}" class="edit-btn btn-warning w-100">Edit</button>
-                    <button id="${movie.id}" value="${movie.id}" class="delete-btn btn-danger w-100 my-1">Delete</button>
+                    <button 
+                        id="mod-btn-${movie.id}" 
+                        class="edit-btn btn-warning w-100" 
+                        onclick="getModal()">                           <!--Function HERE-->
+                            Edit
+                    </button>
+                    <button 
+                        id="del-btn-${movie.id}" 
+                        class="delete-btn btn-danger w-100 my-1"
+                        onclick="action[0]">                           <!--Function HERE-->
+                            Delete
+                    </button>
                 </div>
-            </div> 
-        `
-    }
-    function movieCards(movieList){
-        let output = '<div class="container d-flex justify-content-center flex-wrap">';
-        for (let i = 0; i < movieList.length; i++) {
-            output += movieCard(movieList[i]);
-        }
-        return output + '</div>';
-    }
-    function loader(){
-        return `
-            <div id="loader" class="container d-flex justify-content-center ">
-                <img src="../img/movie-loading.gif" alt="loading movies" width="900px">
             </div>
         `
     }
+    function movieCards(mList){
+        return  '<div class="container d-flex justify-content-center flex-wrap">' +
+                    mList.map(movieCard) +
+                    '</div>'
+
+    }
+
 
     /**
      * MODAL
@@ -96,18 +98,26 @@
                         type="text" 
                         class="form-input mx-3 my-3" 
                         placeholder="Different Poster URL">
-                    <button id="edit-btn" class="btn btn-primary mx-3 my-3">MODIFY</button>
-                    <button id="close-btn" class="btn btn-danger mx-3 my-3">CLOSE</button>
+                    <button 
+                        id="edit-btn" 
+                        class="btn btn-primary mx-3 my-3"
+                        onclick="edit-movie(arrayVarHere[withNum])">            <!--Function HERE-->
+                            MODIFY
+                        </button>
+                    <button 
+                        id="close-modal-btn" 
+                        class="btn btn-danger mx-3 my-3"
+                        onclick="closeModal()">                                 <!--Function HERE-->
+                            CLOSE
+                        </button>
                 </div>
             </div>
-            
-            <script>
-                $('#close-btn').click(()=> {
-                    $('#edit-modal').css('display', 'none')
-                })
-                console.log(${movie.id})
-            </script>   
         `
+    }
+    function closeModal(){
+        $('#close-modal-btn').click(()=> {
+            $('#edit-modal').css('display', 'none')
+        })
     }
 
 
@@ -126,13 +136,20 @@
             poster: $('#poster-input').val()
         }
     }
+    function loader(){
+        return `
+            <div id="loader" class="container d-flex justify-content-center ">
+                <img src="../img/movie-loading.gif" alt="loading movies" width="900px">
+            </div>
+        `
+    }
 
 
     /**
-     * FETCH ACTIONS
+     * ACTIONS
      */
-    // CREATE MOVIE ACTION
-    function addAction(m){
+    // CREATE
+    function createAction(m){
         const addOption = {
             method: 'POST',
             headers: {
@@ -141,88 +158,60 @@
             body: JSON.stringify(m),
         };
         fetch(url, addOption)
-            .then(() =>console.log('Added Movie'))
-            .catch((error) => console.log('Failed to Add Movie: ', error))
-            .then(() =>{
+            .then(() => {
                 $('#movie-container').html(loader());
-                setTimeout(() => {
-                   getAction()
-                }, 3000);
+                readAction();
 
-                console.log(m);
             })
+            .then( (r)=> {
+                console.log('added Movie' + r)
 
+            })
+            .catch((er) => {
+                console.log('Error occurred in adding movie: ' + er)
+
+            })
     }
-    // MODIFY MOVIE ACTION                      <-- prob delete this after it's placed in the RUD ACTION
-    // function modAction(movie){
-    //     const modOption = {
-    //         method: 'PATCH',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify(movie),
-    //     };
-    //     fetch(url, modOption)
-    //         .then(() =>console.log('Success in Modifying Movie'))
-    //         .catch((error) => console.log('Failed to Modify Movie',
 
-    // READ, update, DELETE ACTION
-    function getAction() {
+    // READ
+    function readAction(){
         let output = '';
         fetch(url)
-            .then((response) => response.json())
-            .then((movieList) => {                                      //  SETS CARDS
-                output += movieCards(movieList);
-                $('#movie-container').html(output)                      //   Add cards to the page
-                $('.edit-btn').click((e)=>{                             //   Edit btn Listener Events
-                    movieLib = movieList;                               //   Loads movie list for use later
-                    let selectMovieToMod = e.target.id;
-                    selectMovieToMod = selectMovieToMod.replace('mod-', '');
-                    $('#edit-modal').css('display', 'block').html(movieModal(movieList[3]));
-                    // console.log(`${selectMovieToMod}`);
-                    // console.log(movieLib[selectMovieToMod])});
+            .then((r) => r.json())
+            .then((mList) => {
+                console.log("loading")
+                output += movieCards(mList);
+                $('#movie-container').html(output);
+
             })
             .then(() => {
-                let delOptions = {                                      //  DELETE
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-                $('.delete-btn').click((e) => {                         //   DEL BTN
-                    e.preventDefault();
-                    const tarID = e.target.id;
-                    fetch(`${url}/${tarID}`, delOptions)          //   DEL FETCH
-                        .then(()=>{
-                            $('#movie-container').html(loader());
-                            setTimeout(() => {
-                                getAction()
-                            }, 2000);
-                        })
-                })
-            })
-            .catch((e) => {
-                console.log(e)
-            })
-            });
+                const action = [deleteAction()]
 
+            })
+            .catch((er) => {
+                console.log('You received an error during loading: ' + er)
+            })
+    }
+
+    // UPDATE
+
+    // DELETE
+    function deleteAction(){
+        console.log('nothing yet')
     }
 
     /**
      * EVENT LISTENERS
      */
-    $('#add-btn').on('click', function (){
+    $('#add-movie-btn').on('click', function (){
         const movie = buildMovie();
-        addAction(movie)
+        createAction(movie)
     })
 
 
     /**
      * INITIALIZE
      */
-    getAction();
+    readAction();
 
 })();
-
-
-// ASYNC AWAIT
