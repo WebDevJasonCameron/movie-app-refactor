@@ -142,26 +142,18 @@ function buildMovie () {
         poster: checkURLInput($('#poster-input').val())
     }
 }
-function buildModMovie (orTitle,
-                        orDirector,
-                        orYear,
-                        orGenre,
-                        orActors,
-                        orPlot,
-                        orRating,
-                        orPoster) {
+function buildModMovie (m) {
     return {
-        title: checkMonN( $('#mod-title-input').val(), orTitle),
-        director: checkMonN($('#mod-director-input').val(), orDirector),
-        year: checkMonN($('#mod-year-input').val()), orYear,
-        genre: checkMonN($('#mod-genre-input').val(), orGenre),
-        actors: checkMonN($('#mod-actors-input').val(), orActors),
-        plot: checkMonN($('#mod-plot-input').val(), orPlot),
-        rating: checkMonN($('#mod-rating-input').val(), orRating),
-        poster: checkMonN($('#mod-poster-input').val(), orPoster)
+        title: checkModN($('#mod-title-input').val(), m.title),
+        director: checkModN($('#mod-director-input').val(), m.director),
+        year: checkModN($('#mod-year-input').val(), m.year),
+        genre: checkModN($('#mod-genre-input').val(), m.genre),
+        actors: checkModN($('#mod-actors-input').val(), m.actors),
+        plot: checkModN($('#mod-plot-input').val(), m.plot),
+        rating: checkModN($('#mod-rating-input').val(), m.rating),
+        poster: checkModN($('#mod-poster-input').val(), m.poster)
     }
 }
-
 
 function loader(){
     return `
@@ -170,8 +162,8 @@ function loader(){
         </div>
     `
 }
-function checkMonN(modN, orN){
-    if(modN === ''){
+function checkModN(modN, orN){
+    if(modN === '' || modN === null || typeof modN === 'undefined'){
         return orN;
     } else {
         return modN;
@@ -201,6 +193,7 @@ function createAction(m){
     };
     fetch(url, addOption)
         .then(() => {
+            movieList = []
             $('#movie-container').html(loader());
             readAction();
 
@@ -222,18 +215,32 @@ function readAction(){
         .then((mList) => {
             output += movieCards(mList);
             $('#movie-container').html(output);
-            movieList =mList;
+            movieList = mList;
             console.log(movieList);
-
-
         })
         .catch((er) => {
             console.log('You received an error during loading: ' + er)
         })
 }
 // UPDATE
-function updateAction(m){                                                   // <--3
-
+function updateAction(m){
+    const modMovie = buildModMovie(m);
+    console.log("m is: " + m)
+    console.log("modMovie is: " + modMovie);
+    // const modOptions = {
+    //     method: 'PUT',
+    //     headers: {
+    //         'Content-Type' : 'application/json'
+    //     },
+    //     body: JSON.stringify(modMovie)
+    // };
+    // fetch(`${url}/${m.id}`, modOptions)
+    //     .then(() => {
+    //         movieList = [];
+    //         $('#movie-container').html(loader());
+    //         readAction();
+    //     });
+    closeModal();
 }
 // DELETE
 function deleteAction(movieID) {
