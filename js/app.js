@@ -1,10 +1,11 @@
 // VARS, ARRAY, AND OBJ
 const url = 'https://spangled-checkered-opera.glitch.me/movies';
+let movieList = []
 
 /**
  * MOVIE CARD CONTAINER
  */
-const movieCard = (movie) => {
+function movieCard(movie) {
     return `
          <div class="movie-card card border-0 bg-light shadow">
             <div class="card-body m-3">
@@ -26,7 +27,7 @@ const movieCard = (movie) => {
                 <button 
                     id="mod-btn-${movie.id}" 
                     class="edit-btn btn-warning w-100" 
-                    onclick="getModal()">                           <!--Function HERE-->
+                    onclick="getModal(${movie.id})">                           <!--Function HERE-->
                         Edit
                 </button>
                 <button 
@@ -99,7 +100,7 @@ function movieModal(movie){
                 <button 
                     id="edit-btn" 
                     class="btn btn-primary mx-3 my-3"
-                    onclick="edit-movie(arrayVarHere[withNum])">            <!--Function HERE-->
+                    onclick="updateAction([${movieList.id}])">            <!--Function HERE-->
                         MODIFY
                     </button>
                 <button 
@@ -112,10 +113,17 @@ function movieModal(movie){
         </div>
     `
 }
+function getModal(mID){
+    let targetMovie = $( this )
+    $('#edit-modal').css('display', 'block')
+        .html(movieModal(movieList[mID]))
+    console.log(mID);
+    console.log(movieList);
+
+}
 function closeModal(){
-    $('#close-modal-btn').click(()=> {
-        $('#edit-modal').css('display', 'none')
-    })
+    $('#edit-modal').css('display', 'none')
+        .html(movieModal(''))
 }
 
 
@@ -131,15 +139,51 @@ function buildMovie () {
         actors: $('#actors-input').val(),
         plot: $('#plot-input').val(),
         rating: $('#rating-input').val(),
-        poster: $('#poster-input').val()
+        poster: checkURLInput($('#poster-input').val())
     }
 }
+function buildModMovie (orTitle,
+                        orDirector,
+                        orYear,
+                        orGenre,
+                        orActors,
+                        orPlot,
+                        orRating,
+                        orPoster) {
+    return {
+        title: checkMonN( $('#mod-title-input').val(), orTitle),
+        director: checkMonN($('#mod-director-input').val(), orDirector),
+        year: checkMonN($('#mod-year-input').val()), orYear,
+        genre: checkMonN($('#mod-genre-input').val(), orGenre),
+        actors: checkMonN($('#mod-actors-input').val(), orActors),
+        plot: checkMonN($('#mod-plot-input').val(), orPlot),
+        rating: checkMonN($('#mod-rating-input').val(), orRating),
+        poster: checkMonN($('#mod-poster-input').val(), orPoster)
+    }
+}
+
+
 function loader(){
     return `
         <div id="loader" class="container d-flex justify-content-center ">
             <img src="../img/movie-loading.gif" alt="loading movies" width="900px">
         </div>
     `
+}
+function checkMonN(modN, orN){
+    if(modN === ''){
+        return orN;
+    } else {
+        return modN;
+    }
+}
+
+function checkURLInput(modN){                                                   // <--2
+    if( modN === ''){
+        return 'https://ih1.redbubble.net/image.3059832781.3922/poster,504x498,f8f8f8-pad,600x600,f8f8f8.jpg'
+    } else {
+        return modN;
+    }
 }
 
 
@@ -170,25 +214,27 @@ function createAction(m){
 
         })
 }
-
 // READ
 function readAction(){
     let output = '';
     fetch(url)
         .then((r) => r.json())
         .then((mList) => {
-            console.log("loading")
             output += movieCards(mList);
             $('#movie-container').html(output);
+            movieList =mList;
+            console.log(movieList);
+
 
         })
         .catch((er) => {
             console.log('You received an error during loading: ' + er)
         })
 }
-
 // UPDATE
+function updateAction(m){                                                   // <--3
 
+}
 // DELETE
 function deleteAction(movieID) {
     const deleteOptions = {
