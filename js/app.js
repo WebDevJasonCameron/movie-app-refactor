@@ -45,9 +45,8 @@ function movieCard(movie) {
 }
 function movieCards(mList){
     return  '<div class="container d-flex justify-content-center flex-wrap">' +
-                mList.map(movieCard) +
+                mList.map(movieCard).join('') +
             '</div>'
-
 }
 
 
@@ -102,7 +101,7 @@ function movieModal(movie){
                 <button 
                     id="edit-btn" 
                     class="btn btn-primary mx-3 my-3"
-                    onclick="updateAction(${movie.id})">                 <!--Function HERE-->
+                    onclick="updateAction(${movie.id})">                 
                         MODIFY
                     </button>
                 <button 
