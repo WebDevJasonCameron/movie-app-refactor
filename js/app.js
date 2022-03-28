@@ -5,39 +5,81 @@ let movieList = []
 /**
  * MOVIE CARD CONTAINER
  */
+// function movieCard(movie) {                                              //   <--ORIGINAL
+//     return `
+//         <div class="movie-card card border-0 bg-light shadow">
+//             <div class="card-body m-3">
+//                 <div class="card-img-top">
+//                     <img src="${movie.poster}" alt="Movie Poster" class="img-thumbnail">
+//                 </div>
+//                 <ul class="list-group">
+//                     <li class="list-group-item">Title: ${movie.title}</li>
+//                     <li class="list-group-item">Rating: ${movie.rating}</li>
+//                     <li class="list-group-item">Description: ${movie.plot}</li>
+//                     <li class="list-group-item">Genre: ${movie.genre}</li>
+//                     <li class="list-group-item">Year: ${movie.year}</li>
+//                     <li class="list-group-item">Director: ${movie.director}</li>
+//                     <li class="list-group-item">Actors/Actresses: ${movie.actors}</li>
+//                     <li class="list-group-item">ID: ${movie.id}</li>
+//                 </ul>
+//             </div>
+//             <div class="card-footer">
+//                 <button
+//                     id="mod-btn-${movie.id}"
+//                     class="edit-btn btn-warning w-100"
+//                     aria-label="Button to edit movie"
+//                     onclick="getModal(${movie.id})">
+//                         Edit
+//                 </button>
+//                 <button
+//                     type="button"
+//                     id="del-btn-${movie.id}"
+//                     class="delete-btn btn-danger w-100 my-1"
+//                     aria-label="Button to delete movie"
+//                     onclick="deleteAction(${movie.id})">
+//                         Delete
+//                 </button>
+//             </div>
+//         </div>
+//     `
+// }
 function movieCard(movie) {
     return `
         <div class="movie-card card border-0 bg-light shadow">
-            <div class="card-body m-3">
-                <div class="card-img-top">
-                    <img src="${movie.poster}" alt="Movie Poster" class="img-thumbnail">
+            <div class="card-body flip-card p-0">
+                <div class="flip-card-inner">
+                    <div class="front-card">
+                        <img src="${movie.poster}" alt="Movie Poster" class="img-thumbnail">
+                    </div>
+                    <div class="back-card">
+                        <ul class="list-group">
+                            <li class="list-group-item">Title: ${movie.title}</li> 
+                            <li class="list-group-item">Rating: ${movie.rating}</li> 
+                            <li class="list-group-item">Description: ${movie.plot}</li> 
+                            <li class="list-group-item">Genre: ${movie.genre}</li>
+                            <li class="list-group-item">Year: ${movie.year}</li>
+                            <li class="list-group-item">Director: ${movie.director}</li>
+                            <li class="list-group-item">Actors/Actresses: ${movie.actors}</li>
+                            <li class="list-group-item">ID: ${movie.id}</li>
+                        </ul>
+                    </div>
                 </div>
-                <ul class="list-group">
-                    <li class="list-group-item">Title: ${movie.title}</li> 
-                    <li class="list-group-item">Rating: ${movie.rating}</li> 
-                    <li class="list-group-item">Description: ${movie.plot}</li> 
-                    <li class="list-group-item">Genre: ${movie.genre}</li>
-                    <li class="list-group-item">Year: ${movie.year}</li>
-                    <li class="list-group-item">Director: ${movie.director}</li>
-                    <li class="list-group-item">Actors/Actresses: ${movie.actors}</li>
-                    <li class="list-group-item">ID: ${movie.id}</li>
-                </ul>
             </div>
             <div class="card-footer">
                 <button 
                     id="mod-btn-${movie.id}" 
-                    class="edit-btn btn-warning w-100" 
+                    class="edit-btn btn-warning round-btn" 
                     aria-label="Button to edit movie"
                     onclick="getModal(${movie.id})"> 
-                        Edit                         
+                        <i class="fa-solid fa-pen fa-2xl btn-icon"></i>                         
                 </button>
                 <button 
                     type="button" 
                     id="del-btn-${movie.id}" 
-                    class="delete-btn btn-danger w-100 my-1"
+                    class="delete-btn btn-danger my-1 round-btn"
                     aria-label="Button to delete movie"
                     onclick="deleteAction(${movie.id})">                           
-                        Delete
+                        <i class="fa-solid fa-trash fa-2xl btn-icon"></i>
                 </button>
             </div>
         </div>
@@ -177,7 +219,7 @@ function checkURLInput(modN){                                                   
 
 
 /**
- * ACTIONS
+ * GLITCH API: ACTIONS
  */
 // CREATE
 function createAction(m){
@@ -251,11 +293,35 @@ function deleteAction(movieID) {
 }
 
 /**
+ * OMDB API: ACTIONS
+ */
+// READ
+function readOMBDAction(m){
+    const omdbURL = `http://www.omdbapi.com/?i=tt3896198&apikey=5a824055&t=${m}&plot=full`;
+    const readOptions = {
+        method: 'GET',
+    };
+
+    fetch(omdbURL, readOptions)
+        .then(response => response.json())
+        .then((data) => {
+            console.log(data);
+            console.log(data.plot);
+        })
+}
+
+
+/**
  * EVENT LISTENERS
  */
 $('#add-movie-btn').on('click', function (){
     const movie = buildMovie();
     createAction(movie)
+})
+$('#omdb-search-btn').on('click', function (e){
+    e.preventDefault();
+    let userInput = $('#omdb-search-input').val()
+    readOMBDAction(userInput)
 })
 
 
