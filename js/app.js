@@ -45,33 +45,33 @@ let movieList = []
 // }
 function movieCard(movie) {
     return `
-        <div class="movie-card card border-0 bg-light shadow">
-            <div class="card-body flip-card p-0">
+        <div class="movie-card mx-3">
+            <div class="flip-card" >
                 <div class="flip-card-inner">
                     <div class="front-card">
-                        <img src="${movie.poster}" alt="Movie Poster" class="img-thumbnail">
+                        <img src="${movie.poster}" alt="${movie.plot}">
                     </div>
                     <div class="back-card">
-                        <ul class="list-group">
-                            <li class="list-group-item">Title: ${movie.title}</li> 
-                            <li class="list-group-item">Rating: ${movie.rating}</li> 
-                            <li class="list-group-item">Description: ${movie.plot}</li> 
-                            <li class="list-group-item">Genre: ${movie.genre}</li>
-                            <li class="list-group-item">Year: ${movie.year}</li>
-                            <li class="list-group-item">Director: ${movie.director}</li>
-                            <li class="list-group-item">Actors/Actresses: ${movie.actors}</li>
-                            <li class="list-group-item">ID: ${movie.id}</li>
-                        </ul>
+                        <section class="movie-stats">
+                            <div class="movie-stat">Title: ${movie.title}</div> 
+                            <div class="movie-stat">Rating: ${movie.rating}</div> 
+                            <div class="movie-stat">Description: ${movie.plot}</div> 
+                            <div class="movie-stat">Genre: ${movie.genre}</div>
+                            <div class="movie-stat">Year: ${movie.year}</div>
+                            <div class="movie-stat">Director: ${movie.director}</div>
+                            <div class="movie-stat">Actors/Actresses: ${movie.actors}</div>
+                            <div class="movie-stat">ID: ${movie.id}</div>
+                        </section>
                     </div>
                 </div>
             </div>
-            <div class="card-footer">
+            <div class="movie-card-footer">
                 <button 
                     id="mod-btn-${movie.id}" 
                     class="edit-btn btn-warning round-btn" 
                     aria-label="Button to edit movie"
                     onclick="getModal(${movie.id})"> 
-                        <i class="fa-solid fa-pen fa-2xl btn-icon"></i>                         
+                        <i class="fa-solid fa-pen fa-xlg btn-icon"></i>                         
                 </button>
                 <button 
                     type="button" 
@@ -79,8 +79,9 @@ function movieCard(movie) {
                     class="delete-btn btn-danger my-1 round-btn"
                     aria-label="Button to delete movie"
                     onclick="deleteAction(${movie.id})">                           
-                        <i class="fa-solid fa-trash fa-2xl btn-icon"></i>
+                        <i class="fa-solid fa-trash fa-xlg btn-icon"></i>
                 </button>
+                <div id="star-rating" class="stars">Stars here</div>
             </div>
         </div>
     `
