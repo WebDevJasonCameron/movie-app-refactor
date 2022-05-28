@@ -307,7 +307,7 @@ function readOMBDAction(m){
         .then(response => response.json())
         .then((data) => {
             console.log(data);
-            console.log(data.plot);
+            console.log("data.plot: " + data.Plot);
         })
 }
 
@@ -333,4 +333,4 @@ readAction();
 
 
 
-// test:   ,  '
+
